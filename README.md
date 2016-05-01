@@ -54,8 +54,8 @@ lualib里面都没得头文件，所以我先定义了一下，让后再放进s_
 	local str = request("set", { what = "hello", value = "world" }, 1)
 	print(str)
 	
-最后，其实原本是想能不改skynet的话，就不改，不过最后还是在skynet中添加了几个android.mk文件。
-
-
-
-
+最后，其实原本是想能不改skynet的话，就不改，不过最后还是在skynet中添加了几个android.mk文件。云大的skynet是以submodule的方式放在build/skynet里面的，所以记得用submodule下载一下，我对于submodule也不熟，不过进入到build/skynet/skynet里，这样应该可以：
+	
+	git submodule update --init --recursive 
+	
+好吧，还有点忘说了，需要在unity中添加LUA_5_3宏来使slua支持lua5.3
