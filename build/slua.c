@@ -31,6 +31,7 @@
 
 #include "lua.h"
 #include "lauxlib.h"
+
 #include <stdio.h>
 #include <string.h>
 
@@ -42,8 +43,13 @@
 #include <math.h>
 #endif
 
+int
+luaopen_sproto_core(lua_State *L);
+int luaopen_lpeg (lua_State *L);
+
 static const luaL_Reg s_lib_preload[] = {
-	// { "lpeg", luaopen_lpeg },
+        {"sproto.core", luaopen_sproto_core},
+        { "lpeg", luaopen_lpeg },
 	// { "pb",    luaopen_pb }, // any 3rd lualibs added here
 		{ NULL, NULL }
 };

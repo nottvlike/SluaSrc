@@ -1,0 +1,20 @@
+
+import "UnityEngine"
+
+if not UnityEngine.GameObject or not  UnityEngine.UI then
+	error("Click Make/All to generate lua wrap file")
+end
+
+function main()
+	
+	if _VERSION ~= "Lua 5.3" then
+		error "Use lua 5.3"
+	end
+
+	local sproto = require 'skynet.sproto'
+	local proto = require 'skynet.proto'
+	local host = sproto.new(proto.s2c):host "package"
+	local request = host:attach(sproto.new(proto.c2s))
+	local str = request("set", { what = "hello", value = "world" }, 1)
+	print(str)
+end

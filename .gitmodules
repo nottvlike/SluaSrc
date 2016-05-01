@@ -1,0 +1,3 @@
+[submodule "build/skynet/skynet"]
+	path = build/skynet/skynet
+	url = https://github.com/nottvlike/skynet.git
