@@ -5,6 +5,36 @@ if not UnityEngine.GameObject or not  UnityEngine.UI then
 	error("Click Make/All to generate lua wrap file")
 end
 
+local host
+
+
+local function print_request(name, args)
+	print("REQUEST", name)
+	if args then
+		for k,v in pairs(args) do
+			print(k,v)
+		end
+	end
+end
+
+local function print_response(session, args)
+	print("RESPONSE", session)
+	if args then
+		for k,v in pairs(args) do
+			print(k,v)
+		end
+	end
+end
+
+local function print_package(t, ...)
+	if t == "REQUEST" then
+		print_request(...)
+	else
+		assert(t == "RESPONSE")
+		print_response(...)
+	end
+end
+
 function main()
 	
 	if _VERSION ~= "Lua 5.3" then
@@ -13,8 +43,27 @@ function main()
 
 	local sproto = require 'skynet.sproto'
 	local proto = require 'skynet.proto'
-	local host = sproto.new(proto.s2c):host "package"
+	host = sproto.new(proto.s2c):host "package"
 	local request = host:attach(sproto.new(proto.c2s))
-	local str = request("set", { what = "hello", value = "world" }, 1)
-	print(str)
+	
+	local socket = GameObject.Find("Camera"):GetComponent(TcpSocket)
+	socket:Init("127.0.0.1", 8888, update)
+	socket:Connect()
+	
+	local str = request("handshake", nil, 1)
+	local package = string.pack(">s2", str)
+	socket:Send(package)
+
+	str = request("set", { what = "hello", value = "world" }, 2)
+	package = string.pack(">s2", str)
+	socket:Send(package)
+end
+
+function update(str)
+	--print("Receive MSG " .. str)
+	if str == "" or not str then
+		return
+	end
+
+	print_package(host:dispatch(str))
 end

@@ -41,7 +41,7 @@ namespace SLua
             add(typeof(List<int>), "ListInt");
             add(typeof(Dictionary<int, string>), "DictIntStr");
             add(typeof(string), "String");
-            
+			add(typeof(TcpSocket), "TcpSocket");
             // add your custom class here
             // add( type, typename)
             // type is what you want to export

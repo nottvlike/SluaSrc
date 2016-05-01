@@ -1,8 +1,12 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="../test/slua/Assets/Plugins/Slua_Managed/LuaDLL.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Script/TcpSocket.cs">
     <Files>
-      <File FileName="../test/slua/Assets/Plugins/Slua_Managed/LuaDLL.cs" Line="64" Column="42" />
+      <File FileName="Assets/Script/TcpSocket.cs" Line="168" Column="5" />
+      <File FileName="Assets/Slua/example/Skynet.cs" Line="15" Column="46" />
+      <File FileName="Assets/Slua/Editor/CustomEditor.cs" Line="1" Column="1" />
+      <File FileName="Assets/Slua/Editor/CustomExport.cs" Line="44" Column="37" />
+      <File FileName="Assets/Plugins/Slua_Managed/Logger.cs" Line="16" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

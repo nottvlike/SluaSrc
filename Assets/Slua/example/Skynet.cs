@@ -4,9 +4,10 @@ using SLua;
 
 public class Skynet : MonoBehaviour {
 
+	public TcpSocket MySocket;
 	LuaSvr svr;
 	LuaTable self;
-	LuaFunction update;
+	LuaFunction dispatch;
 	void Start () {
 		svr = new LuaSvr();
 		svr.init(null, () =>
