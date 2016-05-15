@@ -6,6 +6,7 @@ if not UnityEngine.GameObject or not  UnityEngine.UI then
 end
 
 local host
+local socket
 
 
 local function print_request(name, args)
@@ -46,7 +47,7 @@ function main()
 	host = sproto.new(proto.s2c):host "package"
 	local request = host:attach(sproto.new(proto.c2s))
 	
-	local socket = GameObject.Find("Camera"):GetComponent(TcpSocket)
+	socket = GameObject.Find("Camera"):GetComponent(TcpSocket)
 	socket:Init("127.0.0.1", 8888, update)
 	socket:Connect()
 	
@@ -59,9 +60,16 @@ function main()
 	socket:Send(package)
 end
 
-function update(str)
-	--print("Receive MSG " .. str)
-	if str == "" or not str then
+local last = ""
+function update(str, isLast)
+	if isLast then
+		str = last .. str
+		last = ""
+	else
+		last = last .. str
+	end
+
+	if not str then
 		return
 	end
 

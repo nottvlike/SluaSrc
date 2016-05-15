@@ -3,16 +3,27 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Net.Sockets;
 using SLua;
 
+public struct Message
+{
+	public byte[] Data;
+	public bool   IsLast;
+};
+
 public class TcpSocket : MonoBehaviour {
 
-	const int CACHE_SIZE = 4069;
+	const UInt16 CACHE_SIZE = 4069;
 	const int WAIT_OUT_TIME = 5000;
 
-	List<string> _messageList = new List<string> ();
+	List<Message> _messageList = new List<Message> ();
+	Byte[] _recvBytes = new Byte[CACHE_SIZE];
+	Byte[] _header = new Byte[2];
+	byte[] _currentMessage;
+	UInt16 _currentMessageLength;
 
 	Thread _recvThread;
 	Socket _socket;
@@ -21,6 +32,11 @@ public class TcpSocket : MonoBehaviour {
 	LuaFunction _recvCallback;
 
 	void Destroy()
+	{
+		_recvThread.Abort ();
+	}
+
+	void OnApplicationQuit()
 	{
 		_recvThread.Abort ();
 	}
@@ -67,8 +83,7 @@ public class TcpSocket : MonoBehaviour {
 			try
 			{
 				Byte[] bytes = new Byte[CACHE_SIZE];
-				int length = _socket.Receive(bytes);
-
+				int length = _socket.Receive(bytes, bytes.Length, 0);
 				if (length <= 0)
 				{
 					_socket.Close();
@@ -83,35 +98,56 @@ public class TcpSocket : MonoBehaviour {
 					Debug.LogWarning("Reveive Bytes is not larger than 2!");
 				}
 			}
-			catch
+			catch (Exception e)
 			{
-				Debug.Log ("Receive Msg Error!");
+				Debug.Log (string.Format("Receive Msg Error : {0}! ",e.Message));
 			}
 		}
 	}
 
-	void UpackPackage(Byte[] bytes, int index)
+	void UpackPackage(Byte[] bytes, UInt16 index)
 	{
 		while (true) {
-			Byte[] head = new Byte[2];
-			int headLengthIndex = index + 2;
-			//Array.Copy (bytes, index, head, 0, 2);
-			head[0] = bytes[index+1];
-			head[1] = bytes[index];
-			short length = BitConverter.ToInt16(head, 0);
-			if (length > 0)
+			if (_currentMessageLength > 0 && _currentMessageLength < CACHE_SIZE - index)
 			{
-				Byte[] data = new Byte[length+2];
-				Array.Copy (bytes, headLengthIndex, data, 0, length+2);
-				lock (_messageList)
-				{
-					// Access thread-sensitive resources.
-					_messageList.Add (System.Text.Encoding.ASCII.GetString(data));
-				}
-				index = headLengthIndex + length;
+				Byte[] data = new Byte[_currentMessageLength];
+				Array.Copy (bytes, index, data, 0, _currentMessageLength);
+				AddMessageToList(data, true);
+				index += _currentMessageLength;
+				_currentMessageLength = 0;
 			}
-			else
+			else if (_currentMessageLength == 0)
 			{
+				UInt16 headLengthIndex = (UInt16)(index + 2);
+				_header[0] = bytes[index + 1];
+				_header[1] = bytes[index];
+				UInt16 length = BitConverter.ToUInt16(_header, 0);
+				if (length > CACHE_SIZE - headLengthIndex)
+				{
+					_currentMessageLength = (UInt16)(length - CACHE_SIZE + headLengthIndex);
+					Byte[] data = new Byte[CACHE_SIZE - headLengthIndex];
+					Array.Copy (bytes, index, data, 0, CACHE_SIZE - headLengthIndex);
+					AddMessageToList(data, false);
+					break;
+				}
+				else if (length > 0 && length <= CACHE_SIZE - headLengthIndex)
+				{
+					Byte[] data = new Byte[length];
+					Array.Copy (bytes, headLengthIndex, data, 0, length);
+					AddMessageToList(data, true);
+					index = (UInt16)(headLengthIndex + length);
+				}
+				else
+				{
+					break;
+				}
+			}
+			else if (_currentMessageLength >= CACHE_SIZE - index)
+			{
+				_currentMessageLength = (UInt16)(_currentMessageLength - CACHE_SIZE + index);
+				Byte[] data = new Byte[CACHE_SIZE - index];
+				Array.Copy (bytes, index, data, 0, CACHE_SIZE - index);
+				AddMessageToList(data, false);
 				break;
 			}
 		}
@@ -148,6 +184,18 @@ public class TcpSocket : MonoBehaviour {
 		//Debug.Log ("Send MSG Success!");
 	}
 
+	void AddMessageToList(byte[] data, bool isLast)
+	{
+		var message = new Message();
+		message.Data = data;
+		message.IsLast = isLast;
+		lock (_messageList)
+		{
+			// Access thread-sensitive resources.
+			_messageList.Add (message);
+		}
+	}
+	
 	public void Close()
 	{
 		if (_socket != null && _socket.Connected) 
@@ -174,8 +222,8 @@ public class TcpSocket : MonoBehaviour {
 		{
 			if (_messageList.Count > 0) 
 			{
-				string data = _messageList[0];
-				_recvCallback.call(data);
+				var data = _messageList[0];
+				_recvCallback.call(data.Data, data.IsLast);
 				_messageList.RemoveAt(0);
 			}
 		}

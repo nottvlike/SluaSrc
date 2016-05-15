@@ -59,3 +59,39 @@ lualib里面都没得头文件，所以我先定义了一下，让后再放进s_
 	git submodule update --init --recursive 
 	
 好吧，还有点忘说了，需要在unity中添加LUA_5_3宏来使slua支持lua5.3
+
+unity3D联调c确实麻烦，至少到现在我都没有找到一种可以在c中打出log的方法，仔细的阅读过skynet的代码之后，我意识到了自己写的socket还有几个问题：
+
+*	我把lua的string.sub和其它语言的sub搞混了，我以为string.sub(s, i, [j, ])里面的j表示长度，其实是表示位置的；
+*	字符串msg无法成功解析；
+*	支持长度大于CACHE_SIZE的消息。
+
+下面是解决思路
+
+*	第一个问题容易解决，
+*	字符串msg无法解析这个其实我研究了很久都没搞懂为啥，通过lua中的log我发现是core.unpack里面的输出与demo中的不一样，通过与demo比对core.unpack对于每个字节的处理（c打不了log，所以我在sproto.c中的unpack方法里面输出日志到一个txt文本文件里），我发现其实是我这里byte[]转string的时候出了问题，我调用的c#方法如下，这个方法处理服务器发来的二进制消息时，如果byte>128, 就会默认将它改为63(十进制)：
+		
+		System.Text.Encoding.ASCII.GetBytes ( str );
+	
+	其实解决思路也很简单，我只需要将byte[]传递给lua自己去处理就行了，这时我又发现byte[]这个类型默认是以userdata的形式传递过去的，不过lua有个lua_pushlstring()方法可以将byte[]转变为stirng然后传递给lua，因此我改了LuaObject.cs中的传递参数的方法（加了下面一项），默认将byte[]这一类型以string的形式传递给lua：
+	
+			typePushMap[typeof(byte[])] =
+				(IntPtr L, object o) =>
+			{
+				byte[] bytes = (byte[])o;
+				if (bytes != null)
+				{
+					LuaDLL.lua_pushlstring(L, bytes, bytes.Length);
+				}
+				else 
+				{
+					Debug.LogWarning("Failed to convert object to byte[]!");
+				}
+			};
+			
+*	我觉得自己写的那个UnpackPackage实在不是很好看，不过还是先以实现功能为主，之后再考虑优化的事情（sleep其实现在还没有加的必要，也是这个原因），我对于message的长度这块还没有做过验证。
+
+
+	
+	
+	

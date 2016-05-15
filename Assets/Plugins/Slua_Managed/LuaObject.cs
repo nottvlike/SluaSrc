@@ -282,7 +282,20 @@ return index
 				   LuaDLL.lua_pushinteger(L, (byte)o);
 			   };
 
-
+			typePushMap[typeof(byte[])] =
+				(IntPtr L, object o) =>
+			{
+				byte[] bytes = (byte[])o;
+				if (bytes != null)
+				{
+					LuaDLL.lua_pushlstring(L, bytes, bytes.Length);
+				}
+				else 
+				{
+					Debug.LogWarning("Failed to convert object to byte[]!");
+				}
+			};
+			
 			typePushMap[typeof(Int64)] =
 				typePushMap[typeof(UInt64)] =
 				(IntPtr L, object o) =>
