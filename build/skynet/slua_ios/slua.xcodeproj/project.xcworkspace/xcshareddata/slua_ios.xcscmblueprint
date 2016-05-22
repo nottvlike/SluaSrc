@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "16BCFA1EB47C537A4254C08C32590AD083A3938E",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "16BCFA1EB47C537A4254C08C32590AD083A3938E" : 0,
+    "5C265DA62C0155D7E4EDC6539AE07EAD0D3FEB13" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "94B40ED4-78A2-4A88-B410-3199E6DC2B73",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "16BCFA1EB47C537A4254C08C32590AD083A3938E" : "slua\/",
+    "5C265DA62C0155D7E4EDC6539AE07EAD0D3FEB13" : "slua\/build\/skynet\/skynet\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "slua_ios",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "build\/skynet\/slua_ios\/slua_ios.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/nottvlike\/slua.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "16BCFA1EB47C537A4254C08C32590AD083A3938E"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/nottvlike\/skynet.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "5C265DA62C0155D7E4EDC6539AE07EAD0D3FEB13"
+    }
+  ]
+}
