@@ -1,3 +1,9 @@
 [submodule "build/skynet/skynet"]
 	path = build/skynet/skynet
 	url = https://github.com/nottvlike/skynet.git
+[submodule "build/cmake/modules/android-cmake"]
+	path = build/cmake/modules/android-cmake
+	url = https://github.com/taka-no-me/android-cmake.git
+[submodule "build/cmake/modules/ios-cmake"]
+	path = build/cmake/modules/ios-cmake
+	url = https://github.com/cristeab/ios-cmake.git
