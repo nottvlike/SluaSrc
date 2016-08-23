@@ -38,7 +38,10 @@ TODO：
 *	cmake构建系统里，MAC的宏可以不要的，因为现在是用的xcode工程打的bundle包，没用cmake那一套；
 *	skynet的submodule版本不对，我更改cmake构建系统的那个版本应该没上传，好吧，疏忽了，才发现。
 
+##关于编译
 
-	
+在windows平台，我使用推荐设置的tdm-gcc来实行.bat脚本，你可以在[这里](http://tdm-gcc.tdragon.net/)下载到相关的编译器。
+
+当然你也可以使用msys2来执行.sh脚本，你可以在[这里](http://msys2.github.io/)下载到相关的软件，目前应该还有些坑未填。对于msys的配置，你也可以参考下我的[文章](http://www.cnblogs.com/nottvlike/articles/5787142.html)。
 	
 	
