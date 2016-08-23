@@ -87,6 +87,14 @@ namespace LuaInterface
         const string LUADLL = "slua";
 #endif
 
+#if UNITY_ANDROID && !UNITY_EDITOR
+	[DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+	public static extern void freeObj(IntPtr data);
+
+	[DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+	public static extern void getAsset(string fileName, out IntPtr data, out int size);
+#endif
+
         [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void luaS_openextlibs(IntPtr L);
 
