@@ -483,6 +483,7 @@
 		1823B9851D26A8D300297180 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../skynet/skynet/skynet-src",
@@ -500,6 +501,7 @@
 		1823B9861D26A8D300297180 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(SRCROOT)/../skynet/skynet/skynet-src",
