@@ -45,3 +45,9 @@ TODO：
 当然你也可以使用msys2来执行.sh脚本，你可以在[这里](http://msys2.github.io/)下载到相关的软件，目前应该还有些坑未填。对于msys的配置，你也可以参考下我的[文章](http://www.cnblogs.com/nottvlike/articles/5787142.html)。
 	
 	
+##2018.1.31更新：
+近期清理github时，失误清理了自己fetch出来的skynet库，好在自己电脑上还有备份，看了看发现自己基本没改过skynet代码，后来还是决定清理了，我对于skynet的改动只有两个地方：
+1，添加skynet的cmake打包配置；
+2，更改了luaconf.h文件，加了这一句：
+
+	#define lua_getlocaledecpoint()		"."
