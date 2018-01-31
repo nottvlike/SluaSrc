@@ -1,0 +1,14 @@
+if(${PLATFORM} STREQUAL "Android")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DUSE_FILE32API -DANDROID -DLUA_USE_C89")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUSE_FILE32API -DANDROID -DLUA_USE_C89")
+elseif(${PLATFORM} STREQUAL "Win32")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DLUA_BUILD_AS_DLL")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DLUA_BUILD_AS_DLL")
+endif()
+
+
+set(LIB_SRC lapi.c lauxlib.c lbaselib.c lbitlib.c lcode.c lcorolib.c lctype.c
+ldblib.c ldebug.c ldo.c ldump.c lfunc.c lgc.c linit.c liolib.c llex.c lmathlib.c lmem.c
+loadlib.c lobject.c lopcodes.c loslib.c lparser.c lstate.c lstring.c lstrlib.c ltable.c
+ltablib.c ltm.c lundump.c lutf8lib.c lvm.c lzio.c)
+add_library(lua ${LIB_SRC})

@@ -1,0 +1,2 @@
+set(LIB_SRC lpcap.c lpcode.c lpprint.c lptree.c lpvm.c)
+add_library(lpeg ${LIB_SRC})

@@ -1,0 +1,2 @@
+set(LIB_SRC lsha1.c lua-bson.c lua-crypt.c sproto/lsproto.c sproto/sproto.c)
+add_library(luac ${LIB_SRC})
